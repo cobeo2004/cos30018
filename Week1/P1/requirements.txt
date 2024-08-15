@@ -4,3 +4,4 @@ numpy
 matplotlib
 yahoo_fin
 scikit-learn
+lxml_html_clean
