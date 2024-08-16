@@ -104,7 +104,7 @@ def loadData(ticker: Annotated[str, Doc("the ticker you want to load, examples i
     # Add the target column (label) by shifting by `lookup_step`
     df['future'] = df['adjclose'].shift(-lookup_step)
     # Since `lookup_step` columns contains NaN in future column -> get em beffore dropping NaNs
-    last_sequence: NDArray | list[NDArray] = np.array(
+    last_sequence: list[NDArray] = np.array(
         df[feature_columns].tail(n_steps))
     # Drop NaNs
     df.dropna(inplace=True)
