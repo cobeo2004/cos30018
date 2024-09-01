@@ -47,3 +47,4 @@
 ### Here are the weekly tasks that will get upgrade every single week
 - [`Task B.1 - Set Up`](https://github.com/cobeo2004/cos30018/tree/main/Week1)
 - [`Task B.2 - Data Processing 1`](https://github.com/cobeo2004/cos30018/tree/main/Week2)
+- [`Task B.3 - Data Processing 2`](https://github.com/cobeo2004/cos30018/tree/main/Week2)
