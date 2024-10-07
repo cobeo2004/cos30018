@@ -60,3 +60,4 @@
 - [`Task B.3 - Data Processing 2`](https://github.com/cobeo2004/cos30018/tree/main/Week3)
 - [`Task B.4 - Machine Learning 1`](https://github.com/cobeo2004/cos30018/tree/main/Week4)
 - [`Task B.5 - Machine Learning 2`](https://github.com/cobeo2004/cos30018/tree/main/Week5)
+- [`Task B.6 - Machine Learning 3`](https://github.com/cobeo2004/cos30018/tree/main/Week6)
