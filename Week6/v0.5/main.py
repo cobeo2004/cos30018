@@ -1,55 +1,147 @@
-from src.processing import make_datasets, ENTRY_POINT, ticker, ensemble_model_predict
-from src.models import model_gru_config, train_model, save_model, model_lstm_config, model_rnn_config, arima_predict
-from src.charts import metric_plot, plot_arima_param, plot_predicted_vs_actual, plot_candlestick_full, plot_dl_arima_ensemble_real, plot_dl_arima_real
+from src.processing import make_datasets, ENTRY_POINT, ticker
+from src.models import (
+    model_gru_config,
+    train_model,
+    save_model,
+    model_lstm_config,
+    model_rnn_config,
+    arima_predict,
+    predict_model,
+    ensemble_predict,
+)
+from src.charts import plot_actual_vs_predicted, plot_arima_param
 from tensorflow.keras.models import load_model
-data, df, train_data, test_data, train_feature_scale, train_target_scale, x_train, x_test, y_train, y_test = make_datasets()
+import os
 
-# plot_arima_param(df)
+(
+    data,
+    df,
+    train_data,
+    test_data,
+    train_feature_scale,
+    train_target_scale,
+    x_train,
+    x_test,
+    y_train,
+    y_test,
+) = make_datasets()
 
+# Get the number of steps and features
 n_steps = x_train.shape[1]
 n_features = x_train.shape[2]
 
-# rnn_model, rnn_mts = train_model(
-#     model_rnn_config, (n_steps, n_features), x_train, y_train)
+# Plot ARIMA parameters
+plot_arima_param(df)
 
-# save_model(rnn_model, ENTRY_POINT + "/rnn_model.keras")
-rnn_model = load_model(ENTRY_POINT + "/rnn_model.keras")
-rnn_y_pred = rnn_model.predict(x_test)
-rnn_y_pred = train_target_scale.inverse_transform(rnn_y_pred)
+# RNN model
+rnn_model_path = os.path.join(ENTRY_POINT, "rnn_model.keras")
+if os.path.exists(rnn_model_path):
+    rnn_model = load_model(rnn_model_path)
+else:
+    rnn_model, _ = train_model(
+        model_rnn_config, (n_steps, n_features), x_train, y_train
+    )
+    save_model(rnn_model, rnn_model_path)
 
-# lstm_model, lstm_mts = train_model(
-#     model_lstm_config, (n_steps, n_features), x_train, y_train)
+rnn_y_pred, rnn_rmse = predict_model(rnn_model, train_target_scale, x_test, y_test)
+print("RNN RMSE: ", rnn_rmse)
+print("RNN Y Pred Sz: ", len(rnn_y_pred))
+print("RNN Y Pred shape: ", rnn_y_pred.shape)
 
-# save_model(lstm_model, ENTRY_POINT + "/lstm_model.keras")
-lstm_model = load_model(ENTRY_POINT + "/lstm_model.keras")
+# LSTM model
+lstm_model_path = os.path.join(ENTRY_POINT, "lstm_model.keras")
+if os.path.exists(lstm_model_path):
+    lstm_model = load_model(lstm_model_path)
+else:
+    lstm_model, _ = train_model(
+        model_lstm_config, (n_steps, n_features), x_train, y_train
+    )
+    save_model(lstm_model, lstm_model_path)
 
-lstm_y_pred = lstm_model.predict(x_test)
-lstm_y_pred = train_target_scale.inverse_transform(lstm_y_pred)
+lstm_y_pred, lstm_rmse = predict_model(lstm_model, train_target_scale, x_test, y_test)
+print("LSTM RMSE: ", lstm_rmse)
+print("LSTM Y Pred Sz: ", len(lstm_y_pred))
+print("LSTM Y Pred shape: ", lstm_y_pred.shape)
 
-# gru_model, gru_mts = train_model(
-#     model_gru_config, (n_steps, n_features), x_train, y_train)
+# GRU model
+gru_model_path = os.path.join(ENTRY_POINT, "gru_model.keras")
+if os.path.exists(gru_model_path):
+    gru_model = load_model(gru_model_path)
+else:
+    gru_model, _ = train_model(
+        model_gru_config, (n_steps, n_features), x_train, y_train
+    )
+    save_model(gru_model, gru_model_path)
 
-# save_model(gru_model, ENTRY_POINT + "/gru_model.keras")
-gru_model = load_model(ENTRY_POINT + "/gru_model.keras")
+gru_y_pred, gru_rmse = predict_model(gru_model, train_target_scale, x_test, y_test)
+print("GRU RMSE: ", gru_rmse)
+print("GRU Y Pred Sz: ", len(gru_y_pred))
+print("GRU Y Pred shape: ", gru_y_pred.shape)
 
-gru_y_pred = gru_model.predict(x_test)
-gru_y_pred = train_target_scale.inverse_transform(gru_y_pred)
-print(len(gru_y_pred))
+arima_res, arima_rmse = arima_predict(train_data, test_data)
+print("ARIMA res sz: ", len(arima_res))
+print("ARIMA res shape: ", arima_res.shape)
+print("ARIMA RMSE: ", arima_rmse)
 
-# truncated_test_data = test_data.iloc[-len(y_pred):]
-# plot_candlestick_full(train_data, truncated_test_data, y_pred, n=4)
+# LSTM ensemble
+lstm_avg_pred, lstm_ensemble_rmse, lstm_avg_rmse = ensemble_predict(
+    lstm_y_pred,
+    arima_res,
+    lstm_rmse,
+    arima_rmse,
+    test_data["Close"],
+)
+print("LSTM Avg pred: ", lstm_avg_pred)
+print("LSTM Ensemble RMSE: ", lstm_ensemble_rmse)
+print("LSTM Avg RMSE: ", lstm_avg_rmse)
 
-arima_res = arima_predict(x_train, x_test, order=(2, 5, 1))
-# ensembled = ensemble_model_predict(arima_res, gru_y_pred)
-print("Arima res: ", len(arima_res))
-# print("Ensembled: ", ensembled)
-# plot_predicted_vs_actual(test_data, arima_res, ticker)
-# plot_dl_arima_ensemble_real(df, lstm_y_pred, arima_res,
-#                             ensemble_model_predict(arima_res, lstm_y_pred))
+# GRU ensemble
+gru_avg_pred, gru_ensemble_rmse, gru_avg_rmse = ensemble_predict(
+    gru_y_pred,
+    arima_res,
+    gru_rmse,
+    arima_rmse,
+    test_data["Close"],
+)
+print("GRU Avg pred: ", gru_avg_pred)
+print("GRU Ensemble RMSE: ", gru_ensemble_rmse)
+print("GRU Avg RMSE: ", gru_avg_rmse)
 
-# plot_dl_arima_ensemble_real(df, gru_y_pred, arima_res,
-#                             ensemble_model_predict(arima_res, gru_y_pred))
+# RNN ensemble
+rnn_avg_pred, rnn_ensemble_rmse, rnn_avg_rmse = ensemble_predict(
+    rnn_y_pred,
+    arima_res,
+    rnn_rmse,
+    arima_rmse,
+    test_data["Close"],
+)
+print("RNN Avg pred: ", rnn_avg_pred)
+print("RNN Ensemble RMSE: ", rnn_ensemble_rmse)
+print("RNN Avg RMSE: ", rnn_avg_rmse)
 
-# plot_dl_arima_real(df, gru_y_pred, arima_res)
-# plot_dl_arima_real(df, lstm_y_pred, arima_res)
-# plot_dl_arima_real(df, rnn_y_pred, arima_res)
+# Plot LSTM predictions
+plot_actual_vs_predicted(
+    train_data=train_data,
+    test_data=test_data,
+    lstm_predictions=lstm_y_pred,
+    arima_predictions=arima_res,
+    avg_predictions=lstm_avg_pred,
+)
+
+# Plot GRU predictions
+plot_actual_vs_predicted(
+    train_data=train_data,
+    test_data=test_data,
+    gru_predictions=gru_y_pred,
+    arima_predictions=arima_res,
+    avg_predictions=gru_avg_pred,
+)
+
+# Plot RNN predictions
+plot_actual_vs_predicted(
+    train_data=train_data,
+    test_data=test_data,
+    rnn_predictions=rnn_y_pred,
+    arima_predictions=arima_res,
+    avg_predictions=rnn_avg_pred,
+)

@@ -7,5 +7,4 @@ class ModelConfig(TypedDict):
     units: Required[int]
     return_sequences: Required[bool]
     dropout: Required[float]
-    activation: NotRequired[Literal["tanh",
-                                    "relu", "sigmoid", "softmax", "linear"]]
+    activation: NotRequired[Literal["tanh", "relu", "sigmoid", "softmax", "linear"]]

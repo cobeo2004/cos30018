@@ -4,6 +4,7 @@ from .conf import ModelConfig
 from .make_dynamic_model import make_dynamic_model
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
+from sklearn.preprocessing import MinMaxScaler
 from src.processing import ENTRY_POINT
 
 
@@ -18,9 +19,9 @@ def train_model(
     validation_split: float = 0.2,
     early_stopping_patience: int = 10,
     early_stopping_restore_best_weights: bool = True,
-    loss: str = 'mse',
-    optimizer: str = 'adam',
-    metrics: List[str] = ['accuracy']
+    loss: str = "mse",
+    optimizer: str = "adam",
+    metrics: List[str] = ["accuracy"],
 ) -> Tuple[tf.keras.Model, tf.keras.callbacks.History]:
     """
     Train a dynamic model based on the given configuration and data.
@@ -46,11 +47,31 @@ def train_model(
     model.summary()
     model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
     early_cb = EarlyStopping(
-        monitor='val_loss', patience=early_stopping_patience, restore_best_weights=early_stopping_restore_best_weights)
-    model_train_history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, callbacks=[
-                                    early_cb], shuffle=True, validation_split=validation_split)
+        monitor="val_loss",
+        patience=early_stopping_patience,
+        restore_best_weights=early_stopping_restore_best_weights,
+    )
+    model_train_history = model.fit(
+        x_train,
+        y_train,
+        epochs=epochs,
+        batch_size=batch_size,
+        callbacks=[early_cb],
+        shuffle=True,
+        validation_split=validation_split,
+    )
     return model, model_train_history
 
 
 def save_model(model: tf.keras.Model, path: str = ENTRY_POINT + "model.keras") -> None:
     model.save(path)
+
+
+def predict_model(
+    model: tf.keras.Model, scaler: MinMaxScaler, x_test: np.ndarray, y_test: np.ndarray
+) -> Tuple[np.ndarray, float]:
+    pred = model.predict(x_test)
+    pred = scaler.inverse_transform(pred)
+
+    rmse = np.sqrt(np.mean((pred - y_test) ** 2))
+    return pred, rmse

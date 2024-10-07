@@ -8,3 +8,5 @@ yfinance
 TA-lib
 mplfinance
 statsmodels
+plotly
+pmdarima
