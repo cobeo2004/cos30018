@@ -1,0 +1,274 @@
+\documentclass[11pt]{article}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{natbib}  % Added for citation management
+
+\title{Intelligent System \\ Assignment 1 - Option B \\ Week 7 Report}
+\author{Xuan Tuan Minh Nguyen - 103819212}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\pagebreak
+
+\tableofcontents
+
+\newpage
+
+\section{Environment Setup}
+\subsection{Create a new environment using Conda CLI}
+There are several different procedures to create an environment, but the given procedure below will encapsulate all of the required steps to create a safe and clean environment using Conda \citep{Haque2023-kt}.
+
+% This is an example of an auto citation. The \citep{} command is used to create a parenthetical citation.
+% The key 'conda2023' refers to an entry in your bibliography file (e.g., references.bib).
+% When you compile your document, this will be replaced with the appropriate citation style,
+% such as (Conda, 2023) or [1], depending on your chosen citation style.
+
+\begin{itemize}
+    \item Navigate to the Github repository that contains the source code for v0.5.
+    \item Once navigated, download the source code by clicking on Code → Download ZIP or use the following command in the CLI (Terminal):
+    \begin{center}
+    \begin{verbatim}
+    git clone https://github.com/cobeo2004/cos30018.git
+    \end{verbatim}
+    \end{center}
+    \item Once the source code is successfully cloned (downloaded), navigate to the Week 6/v0.5 folder and execute the file conda-config.sh using the following command:
+    \begin{center}
+    \begin{verbatim}
+    bash conda-config.sh
+    \end{verbatim}
+    \end{center}
+    \item The given file config.sh will execute the following procedure:
+    \begin{itemize}
+        \item Generate an environment with a pre-defined name (you can change the name if you want to) in Python 3.10.9 by using the command:
+        \begin{center}
+        \begin{verbatim}
+        conda create -n cos30018_env_w7_v0.5 python=3.10.9
+        \end{verbatim}
+        \end{center}
+        \item Activate the created environment using:
+        \begin{center}
+        \begin{verbatim}
+        conda activate cos30018_env_w7_v0.5
+        \end{verbatim}
+        \end{center}
+        \item Check and validate if the conda environment is successfully initialized by running \verb|conda info --envs| for listing conda environments and see which environment that we are in and current Python version using \verb|python --version|.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Installing required dependencies}
+Once the environment is successfully initialized, we can start installing the dependencies (libraries) that are required by the program. There are multiple pathways to install dependencies in Python, but the most popular steps are:
+
+\begin{itemize}
+    \item Scan through the code to find out the required dependencies; for example, consider the file stock\_prediction.py. We could see that there are quite a few required dependencies, such as: numpy matplotlib pandas tensorflow scikit-learn pandas-datareader yfinance TA-lib statsmodels, plotly and pmdarima. Especially, \textbf{statsmodels} will be used for finding parameters for ARIMA model, \textbf{plotly} for plotting and \textbf{pmdarima} for constructing ARIMA model.
+    \item Once dependencies are scanned, use the following command to install the dependencies:
+    \begin{center}
+    \begin{verbatim}
+    pip install numpy matplotlib pandas tensorflow scikit-learn
+    pandas-datareader yfinance TA-lib statsmodels plotly pmdarima
+    \end{verbatim}
+    \end{center}
+    \item Another step is to list all required libraries into a requirements.txt file, and using the following command to install the required dependencies:
+    \begin{center}
+    \begin{verbatim}
+    pip install -U -r requirements.txt
+    \end{verbatim}
+    \end{center}
+\end{itemize}
+
+% TODO: Add Figure 2: Example of requirements.txt
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure2.png}
+    \caption{Example of requirements.txt}
+    \label{fig:requirements}
+\end{figure}
+
+\section{Understanding the Machine Learning 3}
+\subsection{Exploring the required parameters for the ARIMA model}
+
+\subsubsection{Codebase}
+
+% TODO: Add Figure 3: Codebase for function to display the plots related to ARIMA parameters
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure3.png}
+    \caption{Codebase for function to display the plots related to ARIMA parameters}
+    \label{fig:arima_params_code}
+\end{figure}
+
+\subsubsection{Parameters}
+\begin{itemize}
+    \item \textbf{data: pandas.DataFrame}: The processed data that is used for finding the autoregressive order, difference order and moving average order.
+\end{itemize}
+
+\subsubsection{Functionalities}
+In general, the given code will be used for plotting three graphs that correlate to three different essential parameters that the ARIMA model used, which are the number of lag observations in the model (p), the differencing degree to make the time series stationary (d), and the moving average order (q).
+
+\begin{itemize}
+    \item To observe the number of lags in the model (p), we will use the partial autocorrelation plot that is taken from \textbf{statsmodels} library and look for any crosses for the upper confidence interval, which is illustrated in the code and the plot below:
+\end{itemize}
+
+% TODO: Add Figure 4: Codebase used for plotting PACF
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure4.png}
+    \caption{Codebase used for plotting PACF}
+    \label{fig:pacf_code}
+\end{figure}
+
+% TODO: Add Figure 5: PACF Results of TSLA stock from 2015-01-01 and 2023-08-25
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure5.png}
+    \caption{PACF Results of TSLA stock from 2015-01-01 and 2023-08-25}
+    \label{fig:pacf_results}
+\end{figure}
+
+After a short investigation, we could see that first two lags have a significant correlation, which stays at 1 while the others stay around 0. Thus, a suggested p value that we obtained is 2.
+
+To observe the moving average order (q), we will use the autocorrelation function plot that is also acquired from \textbf{statsmodels} library and look for any crosses for the upper confidence interval, which is illustrated in the code and the plot below:
+
+% TODO: Add Figure 6: Codebase used for plotting ACF
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure6.png}
+    \caption{Codebase used for plotting ACF}
+    \label{fig:acf_code}
+\end{figure}
+
+% TODO: Add Figure 7: ACF Results of TSLA stock from 2015-01-01 and 2023-08-25
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure7.png}
+    \caption{ACF Results of TSLA stock from 2015-01-01 and 2023-08-25}
+    \label{fig:acf_results}
+\end{figure}
+
+The ACF plot points out that there is a significant autocorrelation at the first lag of the plot, thus suggests that the moving average order (q) is 1.
+
+To observe the differencing degree (d), we will inspect the original time series of the stock price and its first and second time series differences.
+
+% TODO: Add Figure 8: Codebase used for plotting time series
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure8.png}
+    \caption{Codebase used for plotting time series}
+    \label{fig:time_series_code}
+\end{figure}
+
+The given code above creates three subplots that sequently correlates to:
+\begin{itemize}
+    \item The original time series of the stock price.
+    \item The first difference of the stock price's time series.
+    \item The second difference of the stock price's time series.
+\end{itemize}
+
+% TODO: Add Figure 9: Time series differences of TSLA stock from 2015-01-01 and 2023-08-25
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure9.png}
+    \caption{Time series differences of TSLA stock from 2015-01-01 and 2023-08-25}
+    \label{fig:time_series_diff}
+\end{figure}
+
+Based on the given three plots, we could see that:
+\begin{itemize}
+    \item The original time series observed a clear upward trend, especially from 2020 onwards. This trend indicates that the series is non-stationary, which suggests that differencing is necessary to achieve stationarity.
+    \item The first-order differencing of the original data appears much more stable compared to the original series plot. The mean seems to be roughly constant around zero, and the variance looks more consistent throughout the time period. This is a significant improvement in terms of stationarity.
+    \item The second-order differencing doesn't seem to be a substantial improvement over the first-order differencing. Thus, might be introducing unnecessary complexity or noise into the data.
+\end{itemize}
+
+Therefore, first-order differencing (d=1) is sufficient to achieve stationarity in this time series.
+
+\subsection{Function to create ARIMA model}
+
+\subsubsection{Codebase}
+
+% TODO: Add Figure 10: Codebase for function to create ARIMA model
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure10.png}
+    \caption{Codebase for function to create ARIMA model}
+    \label{fig:arima_model_code}
+\end{figure}
+
+\subsubsection{Parameters}
+\begin{itemize}
+    \item \textbf{train\_data: pd.DataFrame}: The training dataset that contains historical stock price data.
+    \item \textbf{test\_data: pd.DataFrame}: The testing dataset that contains historical stock price data for evaluation.
+    \item \textbf{p\_range: Tuple[int, int]}: The range of p (number of lag) values to consider in the ARIMA model. Default is (0, 5).
+    \item \textbf{d\_range: Tuple[int, int]}: The range of d (differencing degree) values to consider in the ARIMA model. Default is (0, 2).
+    \item \textbf{q\_range: Tuple[int, int]}: The range of q (moving average) values to consider in the ARIMA model. Default is (0, 5).
+    \item \textbf{m: int}: The number of periods in each season for seasonal ARIMA. Default is 7.
+    \item \textbf{seasonal: bool}: Whether to include seasonal components in the ARIMA model. Default is True.
+\end{itemize}
+
+\subsubsection{Functionalities}
+In general, the major purpose of this function is to use the power of Auto Regressive Integrated Moving Average (ARIMA) model to predict the price of the stock based on the close price. The function performs the following steps:
+
+\begin{itemize}
+    \item \textbf{Data Extraction}: The function starts by extracting the value of the 'Close' price from both pre-processed train and test data, taken from the implemented \texttt{create\_dataset()} function.
+    \item \textbf{Modelling and training the ARIMA}: Once the data has been processed, the function will call to the \texttt{auto\_arima()} function from the module \texttt{pmdarima} that helps creating the arima model with all of the required parameters and help selecting which model is the best parameters for the context. Specifically, the \texttt{auto\_arima()} function will consider the specified ranges for the required p, d, and q parameters, and seasonal components if required. Then, the function will perform trainings with different configurations to find out which model fits the best.
+    \item \textbf{Model Summary}: Displays general informations of the selected ARIMA model, including the parameters and fit statistics.
+    \item \textbf{Prediction}: Then, the function will perform some prediction based on the length of the test data to cover all of the periods on the test data.
+    \item \textbf{Calculate Root Mean Square Error (RMSE)}: Once the prediction is finished, the function will calculate the Root Mean Square Error (RMSE) to indicate the error between the predicted values and the actual test data.
+    \item \textbf{Return}: Finally, the function wil return an array that contains the predicted stock prices for the test period and the Root Mean Square Error of the predictions compared to the actual test data.
+\end{itemize}
+
+\subsection{Function to calculate the ensemble predictions}
+
+\subsubsection{Codebase}
+
+% TODO: Add Figure 11: Codebase for calculate the ensemble predictions
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure11.png}
+    \caption{Codebase for calculate the ensemble predictions}
+    \label{fig:ensemble_predictions_code}
+\end{figure}
+
+\subsubsection{Parameters}
+\begin{itemize}
+    \item \textbf{dl\_pred: np.ndarray}: The prediction results array from the deep learning model, could be from LSTM, GRU or RNN.
+    \item \textbf{arima\_pred: np.ndarray}: The prediction results array from the ARIMA model.
+    \item \textbf{dl\_rmse: float}: Root Mean Square Error (RMSE) value from the deep learning model predictions.
+    \item \textbf{arima\_rmse: float}: Root Mean Square Error (RMSE) value from the ARIMA model predictions.
+    \item \textbf{test\_data: pd.DataFrame | np.ndarray}: The actual test data for comparison and error calculation.
+\end{itemize}
+
+\subsubsection{Functionalities}
+The purpose of this function is to create an ensemble prediction by combining the predictions from a deep learning model with an ARIMA model. The function performs the following procedures:
+
+\begin{itemize}
+    \item \textbf{Data Preparation}: Firstly, the function will flatten the deep learning predictions array if needed and starts modifying the length of predictions and test data to ensure they have the same size as different size of data could result in conflictions when working with charts and further calculations.
+    \item \textbf{Performing ensemble prediction}: It then converts the deep learning predictions and the ARIMA predictions into a \texttt{numpy.array}, then sum all values from both arrays and divide it by 2 to get a unified ensemble prediction array.
+    \item \textbf{Data cleaning}: Then, to ensure that the data is cleaned to perform a smooth plotting experience and for scalability, we search for NaN values in the test data and replace it with 0. Once the NaN values are replaced, the function prints the data after replacing NaN and if there are any NaN values in the deep learning and ARIMA prediction arrays.
+    \item \textbf{Error Calculation}: Once the data is cleaned, the function will calculate the Root Mean Square Error (RMSE) for the ensemble predictions array and the average RMSE from both deep learning model predictions and the ARIMA predictions.
+    \item \textbf{Return data}: Finally, the function will return ensemble predictions result as an \texttt{numpy.ndarray}, the Root Mean Square Error (RMSE) value for the ensemble predictions and the average RMSE value for both deep learning predictions and the ARIMA predictions.
+\end{itemize}
+
+\section{Deploying and Testing the Codebase}
+
+\subsection{Codebase used for testing}
+Please note that, since the given image below that shows the codebase for testing is too long, please refer to the file \texttt{main.py} for the full testing code.
+
+% TODO: Add Figure 12: Codebase for testing
+\begin{figure}[h]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figure12.png}
+    \caption{Codebase for testing}
+    \label{fig:testing_code}
+\end{figure}
+
+% Remember to include a bibliography section at the end of your document:
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
