@@ -1,8 +1,47 @@
 \begin{thebibliography}{1}
 
+\bibitem{Bergstra2012-gr}
+James Bergstra and Yoshua Bengio.
+\newblock Random search for hyper-parameter optimization.
+\newblock \url{https://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf}, 2012.
+\newblock Accessed: 2024-10-25.
+
+\bibitem{Bharathi2018-qx}
+Shri Bharathi and A~Geetha.
+\newblock Sentiment analysis for effective stock market prediction.
+\newblock {\em Int. J. Intelligent Engineering and Systems}, 2018.
+\newblock Accessed: 2024-10-25.
+
+\bibitem{Cutkovic_undated-fh}
+Milan Cutkovic.
+\newblock Best trading indicators: Most popular technical indicators / axi {AU}.
+\newblock \url{https://www.axi.com/au/blog/education/trading-indicators}.
+\newblock Accessed: 2024-10-25.
+
 \bibitem{Haque2023-kt}
 Md~Sabbirul Haque, Md~Shahedul Amin, Jonayet Miah, Duc~Minh Cao, and Ashiqul~Haque Ahmed.
 \newblock Boosting stock price prediction with anticipated macro policy changes.
 \newblock {\em arXiv}, October 2023.
+
+\bibitem{Hardikkumar2021-ry}
+{Hardikkumar}.
+\newblock Stock market forecasting using time series analysis with {ARIMA} model.
+\newblock \url{https://www.analyticsvidhya.com/blog/2021/07/stock-market-forecasting-using-time-series-analysis-with-arima-model/}, July 2021.
+\newblock Accessed: 2024-10-25.
+
+\bibitem{Jiang2020-xl}
+Minqi Jiang, Jiapeng Liu, Lu~Zhang, and Chunyu Liu.
+\newblock An improved stacking framework for stock index prediction by leveraging tree-based ensemble models and deep learning algorithms.
+\newblock {\em Physica A}, 541(122272):122272, March 2020.
+
+\bibitem{Khan2023-zu}
+Razib~Hayat Khan, Jonayet Miah, Md~Minhazur Rahman, Md~Maruf Hasan, and Muntasir Mamun.
+\newblock A study of forecasting stocks price by using deep reinforcement learning.
+\newblock In {\em 2023 {IEEE} World {AI} {IoT} Congress ({AIIoT})}, pages 0250--0255. IEEE, June 2023.
+
+\bibitem{Nti2019-lc}
+Kofi~Opoku Nti, Adebayo Adekoya, and Benjamin Weyori.
+\newblock Random forest based feature selection of macroeconomic variables for stock market prediction.
+\newblock {\em SSRN Electron. J.}, July 2019.
 
 \end{thebibliography}

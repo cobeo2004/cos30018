@@ -1,29 +1,135 @@
 \documentclass[11pt]{article}
 \usepackage{latexsym}
-\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{color}
 \usepackage{geometry}
+
+
+\usepackage{titling}
+% \renewcommand\maketitlehooka{\null\mbox{}\vfill}
+\renewcommand\maketitlehookd{\vfill\null}
+
 \geometry{a4paper, margin=1in}
 \usepackage{natbib}  % Added for citation management
 
-\title{Intelligent System \\ Assignment 1 - Option B \\ Week 7 Report}
-\author{Xuan Tuan Minh Nguyen - 103819212}
-\date{\today}
+\usepackage{graphicx}
+\graphicspath{./images}
 
 \begin{document}
+\begin{titlepage}
+    \title{\includegraphics[width=7cm]{./images/swinburne}\\Intelligent System \\ Assignment 1 - Option B \\ Applying Macroeconomic Indicators to Predict Stock Prices}
+    \author{Xuan Tuan Minh Nguyen - 103819212}
+    \date{\today}
+\end{titlepage}
 
-\maketitle
+\begin{titlingpage}
+    \maketitle
+\end{titlingpage}
+
+
 \pagebreak
 
 \tableofcontents
 
 \newpage
 
-\section{Environment Setup}
-\subsection{Create a new environment using Conda CLI}
-There are several different procedures to create an environment, but the given procedure below will encapsulate all of the required steps to create a safe and clean environment using Conda \citep{Haque2023-kt}.
+\begin{abstract}
+   The major purpose of this research is to showcase \textbf{the application of
+   machine learning} in predicting stock prices with the combination of \textbf{historical}
+   data of \textbf{Macroeconomic Indicators}. In this research, we will focusing on researching
+   the affect of the \textbf{Macroeconomic Indicators} to the stock price prediction.
+   We will be using two most popular models for time series prediction, which are
+   the \textbf{XGBoost} and \textbf{RandomForest} models. In addition, the stock price data will be taken
+   from \textbf{Yahoo Finance}, and the Macroeconomic Indicator data will be taken from
+   \textbf{FRED}. The research will be conducted on \textbf{Tesla Inc.} (TSLA) stock from the date of 2015-01-01 to 2023-08-25.
+   This research will deep dive into \textbf{differentiating} each \textbf{potential solutions} to improve the
+   performance of the \textbf{v0.5} codebase, \textbf{pick and implement} the solution that fits the most for the context.
+   And \textbf{visualize} the \textbf{prediction results} with the actual stock prices to evaluate the performance of the models.
+\end{abstract}
+
+
+\section{Introduction}
+With the significant development of the stock market, more and more investors are interested in
+pouring their money into the stock market to gain profits. However, with the unpredictable nature
+of the stock market, it is very difficult for investors to see when is the perfect time to buy or
+sell their stocks. Therefore, with the phenomenon growth of the \textbf{machine learning} field,
+investors could empower the \textbf{machine learning} to predict the future direction of the stock
+market and could make their own decisions based on the predicted results.
+
+In this research, we will be exploring the application of \textbf{machine learning} in the context of
+predicting the stock prices. Stock price prediction could be a very complicated task as there are multiple
+factors to consider, such as the \textbf{fundamental analysis} and \textbf{technical analysis}. In this research,
+we will be analyzing the potential solutions to improve the performance of the \textbf{v0.5} model, which itself
+strongly relies on the \textbf{historical stock prices} and have a bad performance in the prediction accuracy.
+After that, we will be discussing and picking the best solution to give our \textbf{v0.5} an update to \textbf{v0.6},
+which has a better and more reliable prediction accuracy.
+
+\section{Review of the Potential Solutions}
+Nowadays, there are multiple different approaches that have been proposed to improve the performance of the traditional
+stock price prediction models. These approaches aimed for increase the accuracy and broaden the scope of the prediction
+features by adding more data sources to the model, extending the modeling and data processing techniques and inputting
+external factors that could affect the stock prices. These solutions could be categorized into:
+
+\subsection{Improving the current Ensemble Prediction Model}
+To improve the current ensemble prediction model, using an ensemble of multiple models could be a good solution. Two key
+approaches that could be used to improve the performance of the ensemble prediction model are:
+\begin{itemize}
+    \item \textbf{Stacking Ensemble}: With the powerful non-linear nature of the stacking ensemble, which allows it to
+    combine the predictions from multiple models to create a new model that has a better performance than the individual models,
+    we could use the stacking ensemble to ensemble the predictions from the state of the are
+    models, such as \textbf{Random Forest} and \textbf{XGBoost} models, to achieve a higher preidction accuracy and reducing the
+    generalization error. \cite{Jiang2020-xl}
+    \item \textbf{Bagging / Boosting Ensemble}: In addtion to the stacking ensemble, the Bagging and Boosting are the two most popular
+    ensemble methods to improve the performance of the prediction model. The bagging ensemble method is used to reduce the variance of the prediction model,
+    while the boosting ensemble method is used to reduce the bias of the prediction model. Thus could help to improve the prediction accuracy and reducing the
+    generalization error. \cite{Jiang2020-xl}
+\end{itemize}
+
+\subsection{News and Social Media Content}
+The sentiment of a market could strongly affect the stock prices, as the sentiment of the market could affect the behavior of the investors,
+which in turn could affect the stock prices. Therefore, with the development of the \textbf{natural language processing} field, more and more
+research aimed to use the sentiment analysis to predict the future direction of the stock prices. The following methods were explored:
+\begin{itemize}
+    \item \textbf{News and Social Media Content}: By collecting the news and social media content, we could use the sentiment analysis to predict the future direction of the stock prices, like what \cite{Bharathi2018-qx} did.
+    \item \textbf{Sentiment Analysis}: Natural Language Processing (NLP) is a field that focuses on the interaction between computers and humans using natural language. With the development of the NLP field,
+    we could use the sentiment analysis to predict the future direction of the stock prices, which could result in a higher accuracy. \cite{Bharathi2018-qx}
+\end{itemize}
+
+\subsection{Macroeconomic Indicators}
+It is a well-known fact that some macroeconomic indicators could have a strong correlation with the stock prices, such as the \textbf{unemployment rate} and \textbf{inflation rate} \cite{Haque2023-kt}.
+The following methods were found to be effective in predicting the stock prices:
+\begin{itemize}
+    \item \textbf{Inclusion of Macroeconomic Indicators}: Beside from the stock-specific data, such as the open, close, high and low prices, the volume of the stocks traded and the adjusted close price,
+    we could include the macroeconomic indicators that have a strong correlation with the stock prices to improve the prediction accuracy, such as \textbf{GDP}, \textbf{inflation rate} and \textbf{unemployment rate}. \cite{Haque2023-kt}
+    \item \textbf{Technical Indicators}: By adding technical indicators, such as \textbf{RSI}, \textbf{MACD} and \textbf{William Percent Range}, we could see the overbought and oversold levels on a chart and can
+    help predict where a price is likely to go next, based on past performance. \cite{Cutkovic_undated-fh}
+\end{itemize}
+
+\subsection{Advanced Model Optimization Techniques}
+Different optimization techniques are researched and have been widely used for improving the performance of the prediction model, such as:
+\begin{itemize}
+    \item \textbf{Hyperparameter Optimization}: By finding the optimal hyperparameters for the model, we could improve the prediction accuracy and reducing the generalization error. \cite{Bergstra2012-gr}
+    \item \textbf{Random Search}: Random search is a technique that randomly samples a set of hyperparameters from a given distribution and then evaluates the performance of the model with those hyperparameters.
+    This technique can help to find the optimal hyperparameters for the model, which could improve the prediction accuracy and reducing the generalization error. \cite{Bergstra2012-gr}
+    \item \textbf{Early Stopping and Learning Rate Scheduling}: Early stopping is a technique that stops the training process when the performance of the model starts to decrease, which could help to prevent overfitting.
+    Learning rate scheduling is a technique that adjusts the learning rate during the training process, which could help to increase the prediction accuracy and reducing the error.
+\end{itemize}
+
+\subsection{Advanced Model Applications}
+Moreover, there are some advanced applications that could be used to improve the performance of the prediction model, such as:
+\begin{itemize}
+   \item \textbf{Deep Reinforcement Learning}: Deep Reinforcement Learning (DRL) allows agents to learn directly from raw sensory input, such as images or sounds, without relying on handcrafted features or domain-specific knowledge.
+   Thus making DRL highly flexible and capable of automating tasks, including stock trading. \cite{Khan2023-zu}
+   \item \textbf{Time series Analysis}: Using time-series based models, such as \textbf{ARIMA}, we could effectively predict the short-term stock price and stock returns movements, thanks to the ability of time-series models to
+   capture the underlying patterns and trends in the data. \cite{Hardikkumar2021-ry}
+\end{itemize}
+\section{Implementation}
+After carefully reviewing and considering the researched potential approaches, I have decided to go with the \textbf{Macroeconomic Indicators} approach, as it has a strong correlation with the stock prices, has a high compatibility with the current v0.5 codebase, and has a good prediction accuracy.
+In addition, the \textbf{Macroeconomic Indicators} approach could give me a good point of view to how the macroeconomic indicators could affect the stock prices and how we could use it for the prediction.
+\subsection{Environment Setup}
+\subsubsection{Create a new environment using Conda CLI}
+There are several different procedures to create an environment, but the given procedure below will encapsulate all of the required steps to create a safe and clean environment using Conda \citep{Nti2019-lc}.
 
 % This is an example of an auto citation. The \citep{} command is used to create a parenthetical citation.
 % The key 'conda2023' refers to an entry in your bibliography file (e.g., references.bib).
@@ -62,16 +168,17 @@ There are several different procedures to create an environment, but the given p
     \end{itemize}
 \end{itemize}
 
-\subsection{Installing required dependencies}
+\subsubsection{Installing required dependencies}
 Once the environment is successfully initialized, we can start installing the dependencies (libraries) that are required by the program. There are multiple pathways to install dependencies in Python, but the most popular steps are:
 
 \begin{itemize}
-    \item Scan through the code to find out the required dependencies; for example, consider the file stock\_prediction.py. We could see that there are quite a few required dependencies, such as: numpy matplotlib pandas tensorflow scikit-learn pandas-datareader yfinance TA-lib statsmodels, plotly and pmdarima. Especially, \textbf{statsmodels} will be used for finding parameters for ARIMA model, \textbf{plotly} for plotting and \textbf{pmdarima} for constructing ARIMA model.
+    \item Scan through the code to find out the required dependencies; for example, consider the file stock\_prediction.py. We could see that there are quite a few required dependencies, such as: numpy matplotlib pandas tensorflow scikit-learn pandas-datareader yfinance TA-lib statsmodels plotly pmdarima fredapi xgboost. Especially, \textbf{statsmodels} will be used for finding parameters for ARIMA model, \textbf{fredapi} for getting macroeconomic indicators data and \textbf{xgboost} for constructing XGBoost model.
     \item Once dependencies are scanned, use the following command to install the dependencies:
     \begin{center}
     \begin{verbatim}
     pip install numpy matplotlib pandas tensorflow scikit-learn
-    pandas-datareader yfinance TA-lib statsmodels plotly pmdarima
+    pandas-datareader yfinance TA-lib statsmodels plotly pmdarima fredapi
+    xgboost
     \end{verbatim}
     \end{center}
     \item Another step is to list all required libraries into a requirements.txt file, and using the following command to install the required dependencies:
@@ -82,10 +189,9 @@ Once the environment is successfully initialized, we can start installing the de
     \end{center}
 \end{itemize}
 
-% TODO: Add Figure 2: Example of requirements.txt
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=0.8\textwidth]{figure2.png}
+    \includegraphics[width=8cm]{./images/requirements.png}
     \caption{Example of requirements.txt}
     \label{fig:requirements}
 \end{figure}
@@ -268,7 +374,9 @@ Please note that, since the given image below that shows the codebase for testin
 \end{figure}
 
 % Remember to include a bibliography section at the end of your document:
+
 \bibliographystyle{plain}
 \bibliography{references}
+
 
 \end{document}

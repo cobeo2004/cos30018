@@ -6,7 +6,9 @@ from src.processing import start, end
 
 class FredHelper:
     def __init__(self) -> None:
-        self.fred = Fred(api_key=env.api_key)
+        # For the API key, create a .env file in the root directory (same level as main.py file), and add the following line:
+        # FRED_API_KEY=ad960c77d6ea5ca90ef9b0188ece79eb
+        self.fred = Fred(api_key=env.fred_api_key)
 
     def get_macroeconomic_data(
         self, start_date: str = start, end_date: str = end
