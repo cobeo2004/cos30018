@@ -61,3 +61,4 @@
 - [`Task B.4 - Machine Learning 1`](https://github.com/cobeo2004/cos30018/tree/main/Week4)
 - [`Task B.5 - Machine Learning 2`](https://github.com/cobeo2004/cos30018/tree/main/Week5)
 - [`Task B.6 - Machine Learning 3`](https://github.com/cobeo2004/cos30018/tree/main/Week6)
+- [`Task B.7 - Machine Learning 4 - Extension`](https://github.com/cobeo2004/cos30018/tree/main/Week7)
